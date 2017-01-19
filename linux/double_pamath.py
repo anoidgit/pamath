@@ -1,6 +1,6 @@
 from ctypes import cdll, pointer, c_long, c_double
 
-lib_pamath = cdll.LoadLibrary("./pamath_core.so")
+lib_pamath = cdll.LoadLibrary("./double_pamath_core.so")
 lib_pamath.sum_vec.restype = c_double
 lib_pamath.dot_vec.restype = c_double
 lib_pamath.cos_vec.restype = c_double
