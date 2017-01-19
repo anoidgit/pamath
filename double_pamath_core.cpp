@@ -6,6 +6,20 @@ extern "C"{
 //#include <iostream>
 //using namespace std;
 
+	void map_vec(double * srcp, double * rsp, long vecsize, double (func)(double)){
+		#pragma omp parallel for
+		for(long i = 0; i<vecsize; ++i){
+			rsp[i] = func(srcp[i]);
+		}
+	}
+
+	void map2_vec(double * srcp1, double * srcp2, double * rsp, long vecsize, double (func)(double, double)){
+		#pragma omp parallel for
+		for(long i = 0; i<vecsize; ++i){
+			rsp[i] = func(srcp1[i], srcp2[i]);
+		}
+	}
+
 	double sum_vec(double * vecin, long vecsize){
 		double sum = 0;
 		#pragma omp parallel for reduction(+:sum)
@@ -30,10 +44,23 @@ extern "C"{
 		return rs;
 	}
 
+	double norm2_vec(double * vec, long vecsize){
+		double * mul_rs = new double[vecsize];
+		mul_vec(vec, vec, mul_rs, vecsize);
+		double rs = sqrt(sum_vec(mul_rs, vecsize));
+		delete [] mul_rs;
+		return rs;
+	}
+
 	double cos_vec(double * vec1, double * vec2, long vecsize){
-		double dotv = dot_vec(vec1, vec2, vecsize);
-		double sqr1 = dot_vec(vec1, vec1, vecsize);
-		double sqr2 = dot_vec(vec2, vec2, vecsize);
+		double * mul_rs = new double[vecsize];
+		mul_vec(vec1, vec2, mul_rs, vecsize);
+		double dotv = sum_vec(mul_rs, vecsize);
+		mul_vec(vec1, vec1, mul_rs, vecsize);
+		double sqr1 = sum_vec(mul_rs, vecsize);
+		mul_vec(vec2, vec2, mul_rs, vecsize);
+		double sqr2 = sum_vec(mul_rs, vecsize);
+		delete [] mul_rs;
 		double rs = dotv / sqrt(sqr1 * sqr2);
 		return rs;
 	}
