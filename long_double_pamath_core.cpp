@@ -6,14 +6,14 @@ extern "C"{
 //#include <iostream>
 //using namespace std;
 
-	void map_vec(double * srcp, double * rsp, long vecsize, double (func)(double)){
+	void map_vec(long double * srcp, long double * rsp, long vecsize, long double (func)(long double)){
 		#pragma omp parallel for
 		for(long i = 0; i<vecsize; ++i){
 			rsp[i] = func(srcp[i]);
 		}
 	}
 
-	void map2_vec(double * srcp1, long double * srcp2, long double * rsp, long vecsize, long double (func)(long double, long double)){
+	void map2_vec(long double * srcp1, long double * srcp2, long double * rsp, long vecsize, long double (func)(long double, long double)){
 		#pragma omp parallel for
 		for(long i = 0; i<vecsize; ++i){
 			rsp[i] = func(srcp1[i], srcp2[i]);
