@@ -9,6 +9,9 @@ def sum_vec(vl):
 def mul_vec(v1, v2):
 	return [v1u * v2u for v1u, v2u in zip(v1, v2)]
 
+def add_vec(v1, v2):
+	return [v1u + v2u for v1u, v2u in zip(v1, v2)]
+
 def dot_vec(v1, v2):
 	return sum_vec(mul_vec(v1, v2))
 
